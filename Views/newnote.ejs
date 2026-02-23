@@ -13,6 +13,10 @@
         box-sizing: border-box;
     }
 
+    body {
+        height: 100%;
+    }
+
     nav {
         display: flex;
         justify-content: center;
@@ -52,6 +56,61 @@
             box-shadow: inset 0px 5px 10px gray, inset 0px -5px 10px rgb(78, 78, 78);
         }
     }
+
+    .newNote {
+        /* background-color: red; */
+        height: 60vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+
+        form{
+            /* background-color: beige; */
+            width: 90%;
+            height: 60%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 10px;
+            
+            input{
+                width: 70%;
+                height: 50px;
+                padding: 0px 20px;
+                outline: none;
+                border: 2px solid gray;
+                transition: all .3s ease-in;
+            }
+
+            input:focus{
+                transition: all .3s ease-in;
+                border: 2px solid #63e;
+            }
+
+            button{
+                width: 70%;
+                height: 40px;
+                background-color: transparent;
+                color: black;
+                border: 2px solid black;
+                transition: all .3s ease;
+                cursor: pointer;
+            }
+
+            button:hover{
+                transition: all .3s ease;
+                border: 2px solid #63e;
+                background-color: #63e;
+                color: white;
+            }
+        }
+    }
+
+    p{
+        font-family: sans-serif;
+    }
 </style>
 
 <body>
@@ -65,9 +124,8 @@
     <div class="newNote">
         <form action="/note/newnote" method="POST">
             <input type="text" placeholder="Type Your note..." name="note">
-            <input type="text" placeholder="Any Note description ?" name="description">
+            <input type="text" placeholder="Any Note description ? (optional)" name="description">
             <button>Add Note</button>
-            <button>Reset</button>
         </form>
         <p>
             <% if (locals.msg) { %>

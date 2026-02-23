@@ -1,5 +1,5 @@
 const express = require("express")
-const {createNewNote} = require("../Controllers/note")
+const {createNewNote, updateNote, deleteNote} = require("../Controllers/note")
 
 const router = express.Router()
 
@@ -8,6 +8,7 @@ router.get("/newnote", (req, res) => {
 })
 
 router.post("/newnote", createNewNote)
-router.post("/updatednote", createNewNote)
+router.post("/updatenote", updateNote)
+router.post("/deletenote", deleteNote)
 
 module.exports = router

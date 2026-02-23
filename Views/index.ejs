@@ -102,6 +102,76 @@
             }
         }
     }
+
+    dialog::backdrop {
+        backdrop-filter: blur(10px);
+    }
+
+    #updateBox {
+        width: 400px;
+        height: 300px;
+        border: 2px solid gray;
+
+        h1 {
+            text-align: center;
+            font-family: sans-serif;
+        }
+
+        form {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 80%;
+            gap: 10px;
+
+            input {
+                width: 80%;
+                height: 35px;
+                box-shadow: 5px 5px 0px gray;
+                outline: none;
+                padding: 0px 12px;
+                transition: all .2s ease;
+                margin-bottom: 10px;
+            }
+
+            input:focus {
+                transition: all .2s ease;
+                transform: translate(5px, 5px);
+                box-shadow: 0px 0px 0px transparent;
+            }
+
+            button {
+                width: 90%;
+                height: 40px;
+                background: transparent;
+                border: 2px solid gray;
+                transition: all .3s ease;
+                cursor: pointer;
+
+                &#updateBTN:hover {
+                    transition: all .3s ease;
+                    background-color: rgb(84, 180, 84);
+                    color: rgb(2, 85, 2);
+                    border: 2px solid rgb(84, 180, 84);
+                }
+
+                &#cancelBTN:hover {
+                    transition: all .3s ease;
+                    background-color: rgb(138, 138, 138);
+                    color: rgb(238, 238, 238);
+                    border: 2px solid rgb(138, 138, 138);
+                }
+            }
+        }
+    }
+
+    #deleteBTN:hover {
+        transition: all .3s ease;
+        background-color: rgb(187, 104, 104);
+        color: rgb(71, 3, 3);
+        border: 2px solid rgb(187, 104, 104);
+    }
 </style>
 
 <body>
@@ -111,49 +181,55 @@
         <a href="http://localhost:9090/api/allnotes">JSON</a>
     </nav>
 
-
     <div class="allNotes">
         <% notes.forEach(n=> { %>
-            <div class="note">
-                <p class="noteID">
-                    ID: <%= n._id %>
-                </p>
-                <h2 class="noteTitle">
+            <div class="note" data-id="<%= n._id %>">
+                <h2 class="title">
                     <%= n.note %>
                 </h2>
-                <p class="noteDescription">
+                <p class="desc">
                     <%= n.Description %>
                 </p>
             </div>
             <% }) %>
     </div>
-    <dialog id="updateNote">
-        <form action="/note/updatenote" method="post">
-            <input type="text" id="note" name="updatedNote">
-            <input type="text" id="noteDesc" name="updatedDescription">
-            <input type="text" id="Noteid" name="noteid" disabled>
-            <button type="submit">Update Note</button>
-            <button type="button" onclick="document.getElementById('updateNote').close()">Cancel</button>
+    <dialog id="updateBox">
+        <h1>Update Note</h1>
+        <form action="/note/updatenote" method="POST">
+            <input type="hidden" id="noteId" name="id">
+            <input type="text" id="noteInput" name="note">
+            <input type="text" id="descInput" name="Description">
+            <button type="submit" id="updateBTN">Update</button>
+            <button onclick="document.getElementById('updateBox').close()" id="cancelBTN">Cancel</button>
+        </form>
+        <form action="/note/deletenote" method="POST">
+            <h1 style="color: red;">Delete Your NOTE</h1>
+            <input type="text" name="id" id="deleteID">
+            <button type="submit" id="deleteBTN">Delete</button>
         </form>
     </dialog>
-    <!-- <script>
-        let allNotes = document.querySelectorAll(".note")
-        allNotes.forEach((noteCard) => {
-            noteCard.addEventListener("click", () => {
-                let Note = document.getElementById("note")
-                let NoteDesc = document.getElementById("noteDesc")
-                let NoteId = document.getElementById("Noteid")
-                let updateNoteDialog = document.getElementById("updateNote")
-                const title = noteCard.querySelector(".noteTitle").innerText
-                const desc = noteCard.querySelector(".noteDescription").innerText
-                const id = noteCard.querySelector(".noteID").innerText
-                Note.value = title
-                NoteDesc.value = desc
-                NoteId.vlaue = id
-                updateNoteDialog.showModal()
-            })
-        })
-    </script> -->
+    <p>
+        <% if (locals.msg) { %>
+            <p>
+                <%= msg %>
+            </p>
+            <% } %>
+    </p>
+    <script>
+        let notes = document.querySelectorAll(".note");
+        notes.forEach((card) => {
+            card.addEventListener("click", () => {
+                const id = card.dataset.id;
+                const title = card.querySelector(".title").innerText;
+                const desc = card.querySelector(".desc").innerText;
+                document.getElementById("noteId").value = id;
+                document.getElementById("deleteID").value = id;
+                document.getElementById("noteInput").value = title;
+                document.getElementById("descInput").value = desc;
+                document.getElementById("updateBox").showModal();
+            });
+        });
+    </script>
 </body>
 
 </html>
